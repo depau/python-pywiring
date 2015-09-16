@@ -44,6 +44,8 @@ class PCF8574IO(I2CIOBase):
     has_pwm = False
     has_input = True
     avg_exec_time = 0.005
+    pullup_resistors = False
+    pulldown_resistors = False
 
     def __init__(self, bus, address):
         super(PCF8574IO, self).__init__(bus, address)

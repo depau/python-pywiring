@@ -26,7 +26,7 @@ class ParallelIO(IOBase):
     input pins have pullup resistors, which means they'll return True
     when not connected.
 
-    !(https://upload.wikimedia.org/wikipedia/commons/e/e1/25_Pin_D-sub_pinout.svg)[Parallel port pinout]
+    ![Parallel port pinout](https://upload.wikimedia.org/wikipedia/commons/e/e1/25_Pin_D-sub_pinout.svg)
 
     ### Output pins
 
@@ -70,7 +70,8 @@ class ParallelIO(IOBase):
     had_adc = False
     has_pwm = False
     has_input = True
-    avg_exec_time = 0.005
+    pullup_resistors = True
+    pulldown_resistors = False
 
     def __init__(self, port=0):
         super(ParallelIO, self).__init__()
@@ -84,13 +85,6 @@ class ParallelIO(IOBase):
 
     def port_mode(self, *a):
         warn("Port mode can't be set on a parallel port", RuntimeWarning)
-
-    def read(self):
-        return self._dirmask & uint8(self._bus.read_byte(self.address))
-
-    def write(self, value):
-        self._shadow = value & ~uint8(self._dirmask)
-        self._bus.write_byte(self.address, self._shadow)
 
     def digital_read(self, pin):
         if pin == 0:

@@ -74,19 +74,6 @@ class IOBase(object):
         """
         raise NotImplementedError
 
-    def read(self):
-        """
-        Reads all the pins configured as inputs. An integer is
-        returned.
-        """
-        raise NotImplementedError
-
-    def write(self, value):
-        """
-        Writes to all the pins configured as outputs.
-        """
-        raise NotImplementedError
-
     def digital_read(self, pin):
         """
         Reads the level of a particular pin. True means "high" logic level,
