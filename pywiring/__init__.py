@@ -76,9 +76,9 @@ class IOBase(object):
 
     def digital_read(self, pin):
         """
-        Reads the level of a particular pin. True means "high" logic level,
+        Reads the logic level of a particular pin. True means "high",
         and False means "low". The pin needs to be configured as input,
-        otherwise False will be returned regardless of its actual state.
+        otherwise False will be returned regardless of the pin's actual state.
 
         If the pin doesn't fall within the port's pin range, None will be
         returned.
@@ -117,7 +117,7 @@ class IOBase(object):
     def analog_read(self, pin):
         """
         If :py:data:`pin` has an analog-digital converter, returns the voltage
-        in a range between 0 and 1023 where 0 is 0 volts and 1023 is the
+        in a range between 0 and 1023, where 0 is 0 volts and 1023 is the
         working voltage.
 
         If it doesn't have an ADC, returns 1023 if digital_read(pin) == True,

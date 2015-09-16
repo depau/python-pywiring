@@ -30,34 +30,30 @@ class ParallelIO(IOBase):
 
     ### Output pins
 
-    ============= ==============
-    Library pin # Parallel pin #
-    ============= ==============
-    0             1
-    1             2
-    2             3
-    3             4
-    4             5
-    5             6
-    6             7
-    7             8
-    8             9
-    9             14
-    10            16
-    11            17
-    ============= ==============
+    | Library pin number | Parallel port pin |
+    |:------------------:|:-----------------:|
+    |          0         |         1         |
+    |          1         |         2         |
+    |          2         |         3         |
+    |          3         |         4         |
+    |          4         |         5         |
+    |          5         |         6         |
+    |          6         |         7         |
+    |          7         |         8         |
+    |          8         |         9         |
+    |          9         |         14        |
+    |         10         |         16        |
+    |         11         |         17        |
 
     ### Input pins
 
-    ============= ==============
-    Library pin # Parallel pin #
-    ============= ==============
-    0             10
-    1             11
-    2             12
-    3             13
-    4             15
-    ============= ==============
+    | Library pin number | Parallel port pin |
+    |:------------------:|:-----------------:|
+    |          0         |         10        |
+    |          1         |         11        |
+    |          2         |         12        |
+    |          3         |         13        |
+    |          4         |         15        |
 
     Pins from 18 to 25 are ground. There is no voltage source.
     Either take current from USB, VGA, HDMI, DVI
@@ -143,3 +139,6 @@ class ParallelIO(IOBase):
 
     def analog_write(self, pin, value):
         self.digital_write(pin, value > 0)
+
+    def close(self):
+        self._lpt.close()
