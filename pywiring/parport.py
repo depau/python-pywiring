@@ -124,14 +124,14 @@ class ParallelIO(IOBase):
             if pin == 0 or pin >= 9:
                 self.digital_write(pin, pins[pin])
             else:
-                dpins.append(pin-1)
+                dpins.append(pin)
 
         mask = self._lpt.getData()
         for i in dpins:
             if pins[i]:
-                mask |= 1 << i
+                mask |= 1 << (i - 1)
             else:
-                mask &= ~uint8(1 << i)
+                mask &= ~uint8(1 << (i - 1))
         self._lpt.setData(mask)
 
     def analog_read(self, pin):
@@ -141,4 +141,4 @@ class ParallelIO(IOBase):
         self.digital_write(pin, value > 0)
 
     def close(self):
-        self._lpt.close()
+        self._lpt.PPRELEASE()
