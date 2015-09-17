@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ("I2CIOBase", "PCF8574IO")
+__all__ = ("I2CIOBase", "PCF8574IO", "LCDBackpack")
 
 from . import IOBase
 from numpy import uint8
@@ -102,3 +102,6 @@ class PCF8574IO(I2CIOBase):
 
     def analog_write(self, pin, value):
         self.digital_write(pin, value > 0)
+
+# Simple alias for easier usage
+LCDBackpack = PCF8574IO
