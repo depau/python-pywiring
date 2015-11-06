@@ -13,7 +13,7 @@ def num2boolgen(num):
 
 class ParallelIO(IOBase):
     """
-    Base class for parallel port I/O.
+    Parallel port I/O.
 
     Make sure you unload the lp kernel module and load parport before
     using. Also make sure you have read/write permissions.
@@ -75,6 +75,9 @@ class ParallelIO(IOBase):
         self._outputs = [0]*4
 
         self.digital_write_bulk({i:False for i in xrange(0, 12)})
+
+    def get_pin_modes(self):
+        return [["OUTPUT", "INPUT"]] * 5 + [["OUTPUT"]] * 8
 
     def pin_mode(self, *a):
         warn("Pin mode can't be set on a parallel port", RuntimeWarning)

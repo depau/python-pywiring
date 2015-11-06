@@ -52,6 +52,9 @@ class PCF8574IO(I2CIOBase):
         self._dirmask = uint8(0xFF)    # All inputs
         self._shadow = self._bus.read_byte(self.address)
 
+    def get_pin_modes(self):
+        return [["OUTPUT", "INPUT"]] * 8
+
     def pin_mode(self, pin, input, pullup=False, pulldown=False):
         if input:
             self._dirmask |= uint8(1 << pin)

@@ -131,3 +131,16 @@ class IOBase(object):
         otherwise pulls it high if value > 0 or low if value == 0.
         """
         raise NotImplementedError
+
+    def get_pin_modes(self):
+        """
+        Get the supported modes for all the pins. If the resolution can be
+        obtained, returns a list of dicts in which every dict curresponds to
+        a pin. Each dict contains mode-resolution key-value pairs. If the
+        implementation does not support resolution, a list of lists/tuples
+        will be returned, containing the supported modes.
+        The "officially" supported modes are "INPUT", "OUTPUT", "ANALOG" and
+        "PWM". Other modes and methods to use them may be added by each
+        implementation.
+        """
+        raise NotImplementedError
