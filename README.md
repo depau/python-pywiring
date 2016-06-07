@@ -46,6 +46,9 @@ If it doesn't have an ADC, returns 1023 if `digital_read(pin) == True`, otherwis
 #### analog_write(`pin`, `value`)
 If `pin` is a PWM pin, writes an analog value (PWM wave) to it, otherwise pulls it high if `value > 0` or low if `value == 0`.
 
+#### close()
+Closes the interface after using. It should always be called to clean up the environment and make sure the adapter can be used by other programs.
+
 ## Actual implementations documentation
 ### I²C
 For I²C-based implementations (in the `i2c` submodule), you need to provide the I²C bus number and the device's I²C address as positional arguments. For example:
@@ -60,6 +63,8 @@ You can get a list of I²C buses on Linux by running `i2cdetect -l`. You can sca
 Make sure you have read/write access to the bus.
 
 Beware that a write transaction through I²C usually takes between 4 to 6 milliseconds. You may want to avoid any calls to `time.sleep` if you need to wait shorter than that. You should also prefer using `digital_write_bulk` instead of multiple `digital_write`s, as `digital_write_bulk` tries to set the pins with as little operations as possible.
+
+Make sure you close the interface after using.
 
 ### Parallel port
 As parallel ports were not meant to be used for I/O, they have a few limitations. First, they don't have a power source. You can get some power from USB, VGA, DVI or HDMI (some pinouts [here](http://davideddu.org/blog/posts/graphics-card-i2c-port-howto/)). Second, they do have both inputs and outputs, but not on the same pins, and not in order; there is a pin mapping below. Third, all inputs have pullup resistors, which means they're not very useful in some situations.

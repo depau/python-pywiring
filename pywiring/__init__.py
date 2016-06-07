@@ -144,3 +144,9 @@ class IOBase(object):
         implementation.
         """
         raise NotImplementedError
+
+    def close(self):
+        """
+        Close the interface after using.
+        """
+        pass
