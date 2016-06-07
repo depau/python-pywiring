@@ -66,6 +66,33 @@ Beware that a write transaction through I²C usually takes between 4 to 6 millis
 
 Make sure you close the interface after using.
 
+### Raspberry Pi
+The Raspberry Pi module is a wrapper of RPi.GPIO, and as such it has to be installed first.
+
+The usage is pretty much standard.
+
+```python
+from pywiring import raspi
+ioi = raspi.RasPiIO()
+```
+
+The [pinout](http://pinout.xyz) is your friend: some pins might not be the best for a specific task. Only Broadcom (BCM) pin numbers are currently supported. Do not manually change to board numbers! Things may get messy.
+
+#### Analog input
+As you might now, the Raspberry Pi has no analog input. As such, the `analog_read` method will always raise `NotImplementedError`.
+
+#### PWM (analog output)
+Raspberry Pi has hardware PWM on only on pins 12, 13 and 18. PWM on other pins is software-emulated. As such, you need to make sure you don't use too many of them at the same time, as the CPU usage will raise quickly.
+
+There are two ways to enable PWM: one is the *classic* `analog_write`, which works as you might expect (LEDs may flicker on software PWM), and `raspi_pwm_write`.
+
+##### raspy_pwm_write(`pin`, `freq`, `dutycycle`)
+If PWM is not enabled on pin, it enables it with the provided parameters. IF it's already enabled, the parameters are updated.
+
+`freq` is in Hz and must be greater than 1; `dutycycle` must be between 1 and 100. Both must be provided upon enabling.
+
+Setting either one of them to 0 will turn off PWM on that specific pin.
+
 ### Parallel port
 As parallel ports were not meant to be used for I/O, they have a few limitations. First, they don't have a power source. You can get some power from USB, VGA, DVI or HDMI (some pinouts [here](http://davideddu.org/blog/posts/graphics-card-i2c-port-howto/)). Second, they do have both inputs and outputs, but not on the same pins, and not in order; there is a pin mapping below. Third, all inputs have pullup resistors, which means they're not very useful in some situations.
 
