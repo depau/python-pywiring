@@ -26,34 +26,34 @@ from RPi import GPIO
 #              26,   20,
 #              None, 21]     # gnd
 
-PINMODES = [["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM"],
-            ["INPUT", "OUTPUT", "PWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"],
-            ["INPUT", "OUTPUT", "SWPWM"]]
+PINMODES = [["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "HWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "HWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "HWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM"]]
 
 map = lambda x, in_min, in_max, out_min, out_max: \
     (x-in_min)*(out_max-out_min)/(in_max-in_min)+out_min
@@ -71,6 +71,11 @@ class RasPiIO(IOBase):
     before blindly using this module: even though `get_pin_modes`
     may say a pin is suitable for a certain purpose, there might be
     a better one.
+
+    In the pin modes table, "HWPWM" is used to specify that the pulse width
+    modulation is hardware-backed; "SWPWM" if it's software-backed. Make
+    sure you don't use too many software PWM pins at the same time, as
+    they're not very accurate and consume a lot of CPU.
     """
 
     number_of_pins = 28
