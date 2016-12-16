@@ -97,12 +97,6 @@ class ParallelIO(IOBase):
         elif pin == 4:
             return self._lpt.getInError()
 
-    def digital_read_bulk(self, *pins):
-        tor = {}
-        for pin in pins:
-            tor[pin] = self.digital_read(pin)
-        return tor
-
     def digital_write(self, pin, high):
         if pin > 0 and pin < 9:
             bpin = 1 << (pin - 1)

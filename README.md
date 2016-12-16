@@ -155,4 +155,4 @@ Make sure you use unique names (e.g. don't use `serial`, there is already a `ser
 
 All methods must be implemented. If a feature can't be implemented, replace it with a stub method and add a warning for the user into it (see `parport.ParallelIO.pin_mode`), or try to replicate it as best as you can (see `i2c.PCF8574IO.pin_mode`). If the behavior differs, make sure you write it in the documentation and, eventually, throw a warning.
 
-"Bulk" methods are time critical! They **must** take as little time as possible! Don't replace them with `for pin in pins: digital_write(pin, pins[pin])`, unless there is no other way to do it!!! If you can set multiple pins at once, **do it!**
+"Bulk" methods are time critical! They **must** take as little time as possible! Don't replace them with `for pin in pins: digital_write(pin, pins[pin])`, unless there is no other way to do it!!! If you can set multiple pins at once, **do it!** Some platforms, however, don't have this possibility. For this reason, all *bulk* methods + `port_mode` in `IOBase` include a default implementation that simply iterates over the given pins and runs the curresponding non-bulk method.
