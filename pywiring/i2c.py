@@ -55,14 +55,20 @@ class PCF8574IO(I2CIOBase):
     def get_pin_modes(self):
         return [["OUTPUT", "INPUT"]] * 8
 
-    def pin_mode(self, pin, input, pullup=False, pulldown=False):
+    def pin_mode(self, pin, input, pullup=False, pulldown=False, localonly=False):
         if input:
             self._dirmask |= uint8(1 << pin)
         else:
             self._dirmask &= ~uint8(1 << pin)
+        if not localonly:
+            self._poweroff_inputs()
 
     def port_mode(self, input, pullup=False, pulldown=False):
         self._dirmask = uint8(0xFF) if input else uint8(0x00)
+        self._poweroff_inputs()
+
+    def _poweroff_inputs(self):
+        self.write(self._shadow)
 
     def read(self):
         return self._dirmask & uint8(self._bus.read_byte(self.address))
