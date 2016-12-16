@@ -75,6 +75,15 @@ class IOBase(object):
         for i in xrange(self.number_of_pins):
             self.pin_mode(input, pullup, pulldown)
 
+    def pin_mode_bulk(self, pins):
+        """
+        Sets the pin mode for multiple pins at once.
+        :py:data:`pins` must be a dict whose keys are the pin numbers and whose
+        values are lists/tuples of bools defined as (input, pullup, pulldown).
+        """
+        for pin in pins:
+            self.pin_mode(pin, *pins[pin])
+
     def digital_read(self, pin):
         """
         Reads the logic level of a particular pin. True means "high",
@@ -151,6 +160,41 @@ class IOBase(object):
         The "officially" supported modes are "INPUT", "OUTPUT", "ANALOG" and
         "PWM". Other modes and methods to use them may be added by each
         implementation.
+        """
+        raise NotImplementedError
+
+    def enable_event_detect(self, pin, edge, callback=None, bounce=0):
+        """
+        If supported by the platform, enable event detection on selected pin.
+        :py:data:`edge` can be 'RISING', 'FALLING' or 'BOTH'. A callback and
+        switch bounce timeout (in milliseconds) can also be specified.
+        If you don't set a callback, you can check whether an event has been
+        detected by polling :py:meth:`~IOBase.event_detected`.
+
+        "EDGE" must be specified by :py:meth:`~IOBase.get_pin_modes` in order
+        for this to work.
+
+        Pin must be set as input first.
+        """
+        raise NotImplementedError
+
+    def add_event_callback(self, pin, callback):
+        """
+        Adds a callback function for a pin event previously enabled with
+        :py:meth:`~IOBase.enable_event_detect`.
+        """
+        raise NotImplementedError
+
+    def disable_event_detect(self, pin):
+        """
+        Disable event detection on :py:data:`pin`.
+        """
+        raise NotImplementedError
+
+    def event_detected(self, pin):
+        """
+        Returns True if an event previously enabled with :py:meth:`~IOBase.enable_event_detect`
+        has been detected, otherwise False.
         """
         raise NotImplementedError
 

@@ -26,34 +26,34 @@ from RPi import GPIO
 #              26,   20,
 #              None, 21]     # gnd
 
-PINMODES = [["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "HWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "HWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "HWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"],
-            ["INPUT", "OUTPUT", "PWM", "SWPWM"]]
+PINMODES = [["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "HWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "HWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "HWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
+            ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"]]
 
 map = lambda x, in_min, in_max, out_min, out_max: \
     (x-in_min)*(out_max-out_min)/(in_max-in_min)+out_min
@@ -140,6 +140,28 @@ class RasPiIO(IOBase):
                 self._pwm[pin].ChangeFrequency(freq)
             if dutycycle is not None:
                 self._pwm[pin].ChangeDutyCycle(dutycycle)
+
+    def enable_event_detect(self, pin, edge, callback=None, bounce=0):
+        rpiedge = None
+        if edge == "RISING":
+            rpiedge = RPi.GPIO.RISING
+        elif edge == "FALLING":
+            rpiedge = Rpi.GPIO.FALLING
+        elif edge == "BOTH":
+            rpiedge = Rpi.GPIO.BOTH
+        if callback:
+            return RPi.GPIO.add_event_detect(pin, rpiedge, callback, bounce)
+        else:
+            return RPi.GPIO.add_event_detect(pin, rpiedge, bouncetime=bounce)
+
+    def add_event_callback(self, pin, callback):
+        return RPi.GPIO.add_event_callback(pin, callback)
+
+    def disable_event_detect(self, pin):
+        return RPi.GPIO.remove_event_detect(pin)
+
+    def event_detected(self, pin):
+        return RPi.GPIO.event_detected(pin)
 
     def close(self):
         GPIO.cleanup()

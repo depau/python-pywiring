@@ -67,6 +67,11 @@ class PCF8574IO(I2CIOBase):
         self._dirmask = uint8(0xFF) if input else uint8(0x00)
         self._poweroff_inputs()
 
+    def pin_mode_bulk(self, pins):
+        for pin in pins:
+            self.pin_mode(pin, pins[pin][0], localonly=True)
+        self._poweroff_inputs()
+
     def _poweroff_inputs(self):
         self.write(self._shadow)
 
