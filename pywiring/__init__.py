@@ -93,7 +93,13 @@ class IOBase(object):
         Returns a dict whose keys are the pin numbers you asked for, with the
         respective level as value.
         """
-        raise NotImplementedError
+        tor = {}
+        for pin in pins:
+            if pin >= 0 and pin < self.number_of_pins:
+                tor[pin] = self.digital_read(pin)
+            else:
+                tor[pin] = None
+        return tor
 
     def digital_write(self, pin, high):
         """
@@ -112,7 +118,9 @@ class IOBase(object):
         short amount of time, as a write operation takes some time on protocols
         like i2c.
         """
-        raise NotImplementedError
+        for pin in pins:
+            if pin >= 0 and pin < self.number_of_pins:
+                self.digital_write(pin, pins[pin])
 
     def analog_read(self, pin):
         """

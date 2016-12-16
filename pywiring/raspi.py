@@ -112,22 +112,8 @@ class RasPiIO(IOBase):
     def digital_read(self, pin):
         return bool(GPIO.input(pin))
 
-    def digital_read_bulk(self, *pins):
-        tor = {}
-        for pin in pins:
-            if pin >= 0 and pin < self.number_of_pins:
-                tor[pin] = self.digital_read(pin)
-            else:
-                tor[pin] = None
-        return tor
-
     def digital_write(self, pin, high):
         GPIO.output(pin, GPIO.HIGH if high else GPIO.LOW)
-
-    def digital_write_bulk(self, pins):
-        for pin in pins:
-            if pin >= 0 and pin < self.number_of_pins:
-                self.digital_write(pin, pins[pin])
 
     def analog_write(self, pin, value):
         self.raspi_pwm_write(pin, 800, map(value, 0, 255, 0, 100))
