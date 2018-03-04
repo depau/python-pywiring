@@ -80,7 +80,7 @@ class PCF8574IO(I2CIOBase):
 
     def write(self, value):
         self._shadow = value & ~uint8(self._dirmask)
-        self._bus.write_byte(self.address, self._shadow)
+        self._bus.write_byte(self.address, int(self._shadow))
 
     def digital_read(self, pin):
         return self.digital_read_bulk(pin)[pin]
