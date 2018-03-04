@@ -83,7 +83,7 @@ class PCF8574IO(I2CIOBase):
         self._bus.write_byte(self.address, self._shadow)
 
     def digital_read(self, pin):
-        return digital_read_bulk(pin)[pin]
+        return self.digital_read_bulk(pin)[pin]
 
     def digital_read_bulk(self, *pins):
         tor = {}
