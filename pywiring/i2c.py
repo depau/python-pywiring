@@ -90,7 +90,7 @@ class PCF8574IO(I2CIOBase):
         portstate = self.read()
         for pin in pins:
             if pin >= 0 and pin < self.number_of_pins:
-                pval = portstate & self._dirmask
+                pval = portstate
                 tor[pin] = bool((pval >> pin) & 0x01)
             else:
                 tor[pin] = None
