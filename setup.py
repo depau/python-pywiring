@@ -19,7 +19,7 @@ setup(
     url = "http://github.com/Davidedd/python-pywiring",
     packages=['pywiring'],
     long_description=read('README.md'),
-    requires=["smbus", "parallel", "numpy"],
+    requires=["smbus-cffi", "pyparallel", "numpy"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator",
