@@ -2,15 +2,20 @@
 
 __all__ = ("I2CIOBase", "PCF8574IO", "LCDBackpack")
 
-from . import IOBase
-from numpy import uint8
+from abc import ABC
+
 import smbus
+from numpy import uint8
+
+from . import IOBase
+
 
 def num2boolgen(num):
     for bit in reversed(bin(num)[2:]):
         yield bit == "1"
 
-class I2CIOBase(IOBase):
+
+class I2CIOBase(IOBase, ABC):
     """
     Base class for I2C-based I/O ports.
     """
@@ -27,7 +32,8 @@ class I2CIOBase(IOBase):
         """
         self._bus.close()
 
-class PCF8574IO(I2CIOBase):
+
+class PCF8574IO(I2CIOBase, ABC):
     """
     Class that provides basic I2C communication methods,
     adapted for the PCF8574 integrated circuit.
@@ -49,7 +55,7 @@ class PCF8574IO(I2CIOBase):
 
     def __init__(self, bus, address):
         super(PCF8574IO, self).__init__(bus, address)
-        self._dirmask = uint8(0xFF)    # All inputs
+        self._dirmask = uint8(0xFF)  # All inputs
         self._shadow = self._bus.read_byte(self.address)
 
     def get_pin_modes(self):
@@ -89,7 +95,7 @@ class PCF8574IO(I2CIOBase):
         tor = {}
         portstate = self.read()
         for pin in pins:
-            if pin >= 0 and pin < self.number_of_pins:
+            if 0 <= pin < self.number_of_pins:
                 pval = portstate
                 tor[pin] = bool((pval >> pin) & 0x01)
             else:
@@ -97,13 +103,13 @@ class PCF8574IO(I2CIOBase):
         return tor
 
     def digital_write(self, pin, high):
-        self.digital_write_bulk({pin:high})
+        self.digital_write_bulk({pin: high})
 
     def digital_write_bulk(self, pins):
         shadow = self._shadow
 
         for pin in pins:
-            if pin >= 0 and pin < self.number_of_pins:
+            if 0 <= pin < self.number_of_pins:
                 bpin = 1 << pin
                 if pins[pin]:
                     shadow |= bpin
@@ -116,6 +122,7 @@ class PCF8574IO(I2CIOBase):
 
     def analog_write(self, pin, value):
         self.digital_write(pin, value > 0)
+
 
 # Simple alias for easier usage
 LCDBackpack = PCF8574IO

@@ -2,21 +2,24 @@
 # -*- coding: utf-8 -*-
 
 import os
+
 from setuptools import setup
+
 
 def read(fname):
     with open(os.path.join(os.path.dirname(__file__), fname), "r") as f:
         return f.read()
 
+
 setup(
-    name = "pywiring",
-    version = "0.1",
-    author = "Davide Depau",
-    author_email = "apps@davideddu.org",
-    description = ("A module tries to bring a Wiring-like interface to Python."),
-    license = "GPLv2",
-    keywords = "wiring i2c gpio parallel serial io",
-    url = "http://github.com/Davidedd/python-pywiring",
+    name="pywiring",
+    version="0.1",
+    author="Davide Depau",
+    author_email="apps@davideddu.org",
+    description="A module tries to bring a Wiring-like interface to Python.",
+    license="GPLv2",
+    keywords="wiring i2c gpio parallel serial io",
+    url="http://github.com/Davidedd/python-pywiring",
     packages=['pywiring'],
     long_description=read('README.md'),
     install_requires=["smbus-cffi", "pyparallel", "numpy"],

@@ -8,6 +8,7 @@ ports (parallel, PCF8574 through I2C, GPIO).
 
 __all__ = ("IOBase", "i2c")
 
+
 class IOBase(object):
     """
     Base class with the basic methods.

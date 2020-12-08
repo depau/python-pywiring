@@ -1,17 +1,22 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ("ParallelIO")
+__all__ = "ParallelIO"
+
+from abc import ABC
+from warnings import warn
+
+import parallel
+from numpy import uint8
 
 from . import IOBase
-from numpy import uint8
-from warnings import warn
-import parallel
+
 
 def num2boolgen(num):
     for bit in reversed(bin(num)[2:]):
         yield bit == "1"
 
-class ParallelIO(IOBase):
+
+class ParallelIO(IOBase, ABC):
     """
     Parallel port I/O.
 
@@ -62,7 +67,7 @@ class ParallelIO(IOBase):
     enough though.
     """
 
-    number_of_pins = 12 # Only output pins
+    number_of_pins = 12  # Only output pins
     had_adc = False
     has_pwm = False
     has_input = True
@@ -72,9 +77,9 @@ class ParallelIO(IOBase):
     def __init__(self, port=0):
         super(ParallelIO, self).__init__()
         self._lpt = parallel.Parallel(port)
-        self._outputs = [0]*4
+        self._outputs = [0] * 4
 
-        self.digital_write_bulk({i:False for i in xrange(0, 12)})
+        self.digital_write_bulk({i: False for i in range(0, 12)})
 
     def get_pin_modes(self):
         return [["OUTPUT", "INPUT"]] * 5 + [["OUTPUT"]] * 8
@@ -98,7 +103,7 @@ class ParallelIO(IOBase):
             return self._lpt.getInError()
 
     def digital_write(self, pin, high):
-        if pin > 0 and pin < 9:
+        if 0 < pin < 9:
             bpin = 1 << (pin - 1)
             mask = self._lpt.getData()
             if high:

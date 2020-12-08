@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ("RasPiIO")
+__all__ = "RasPiIO"
+
+from abc import ABC
+
+from RPi import GPIO
 
 from . import IOBase
-from RPi import GPIO
 
 # BOARD2BCM = [None, None    # 3.3v   5v
 #              2,    None,   #        5v
@@ -56,9 +59,10 @@ PINMODES = [["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"],
             ["INPUT", "OUTPUT", "PWM", "SWPWM", "EDGE"]]
 
 map = lambda x, in_min, in_max, out_min, out_max: \
-    (x-in_min)*(out_max-out_min)/(in_max-in_min)+out_min
+    (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
-class RasPiIO(IOBase):
+
+class RasPiIO(IOBase, ABC):
     """
     A wrapper for RPi.GPIO that allows programs written for PyWiring
     to interface with hardware attached to a Raspberry Pi.
@@ -123,7 +127,7 @@ class RasPiIO(IOBase):
         Both `freq` and `dutycycle` must be provided to enable PWM.
         To disable, set them to 0.
         """
-        
+
         if pin not in self._pwm.keys() and None in (freq, dutycycle):
             raise ValueError("Both freq and dutycycle must be provided in order to enable PWM.")
         elif pin not in self._pwm.keys():
